@@ -77,11 +77,10 @@ class Utility(commands.Cog):
         if encoding not in self.encodings:
             raise commands.BadArgument(f"improper encoding for {ctx.command.name} command: {encoding}")
 
-        converter = getattr(base64, f"{encoding}{conversion_type}")
-        print(f"{encoding}{conversion_type}", converter)
+        converter = getattr(base64, f"{encoding}{conversion_type}")  # get either encoding or decoding function attr
         output = str(converter(bytes(_input, "utf-8")))[2:-1]  # get rid of b' ' in output
 
-        if len(output) > 1996:
+        if len(output) > 1996:  # keep within discord content size bounds
             raise commands.BadArgument("Input must be between 1 and 1996 characters, inclusive.")
 
         return output
