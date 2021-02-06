@@ -1,8 +1,3 @@
-def trust_factor(member):
-    """ get the trust factor of a member. """
-    pass
-
-
 def dt_format(dt_obj):
     """ my own preferential formatting of a datetime object. """
     return dt_obj.strftime("%H:%M, %Y.%m.%d")
