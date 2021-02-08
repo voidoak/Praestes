@@ -23,7 +23,7 @@ class Utility(commands.Cog):
     async def colour(self, ctx, clr:discord.Colour=None):
         """ see a passed in colour or leave blank for a random colour """
         clr = clr or discord.Colour.random()
-        embed = discord.Embed(title=str(clr), colour=clr)
+        embed = discord.Embed(title=str(clr), colour=clr, url=f"http://google.com/search?q={str(clr).replace('#', '%23')}&tbm=isch")
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["roll"])

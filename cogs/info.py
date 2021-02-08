@@ -23,7 +23,7 @@ class Info(commands.Cog):
         """ get guild permissions for a given member """
         member = member or ctx.author
         perms = member.guild_permissions
-        attrs = ['add_reactions', 'administrator', 'attach_files', 'ban_members', 'change_nickname', 'connect', 'create_instant_invite', 'deafen_members', 'embed_links', 'external_emojis', 'kick_members', 'manage_channels', 'manage_emojis', 'manage_guild', 'manage_messages', 'manage_nicknames', 'manage_permissions', 'manage_roles', 'manage_webhooks', 'mention_everyone', 'move_members', 'mute_members', 'priority_speaker', 'read_message_history', 'read_messages', 'send_messages', 'send_tts_messages', 'speak', 'stream', 'use_external_emojis', 'use_voice_activation', 'value', 'view_audit_log', 'view_channel', 'view_guild_insights']
+        attrs = ['add_reactions', 'administrator', 'attach_files', 'ban_members', 'change_nickname', 'connect', 'create_instant_invite', 'deafen_members', 'embed_links', 'external_emojis', 'kick_members', 'manage_channels', 'manage_emojis', 'manage_guild', 'manage_messages', 'manage_nicknames', 'manage_permissions', 'manage_roles', 'manage_webhooks', 'mention_everyone', 'move_members', 'mute_members', 'priority_speaker', 'read_message_history', 'read_messages', 'send_messages', 'send_tts_messages', 'speak', 'stream', 'use_external_emojis', 'use_voice_activation', 'view_audit_log', 'view_channel', 'view_guild_insights']
 
         message = ""
         embed = discord.Embed(title=f"Guild permissions for {member}.")
@@ -131,9 +131,9 @@ class Info(commands.Cog):
             await ctx.send(embed=embed)
             await asyncio.sleep(0.51)
 
-    @commands.command()
+    @commands.command(aliases=["bot"])
     @commands.cooldown(1, 15, commands.BucketType.user)
-    async def about(self, ctx):
+    async def botstats(self, ctx):
         """ get bot information """
         owner = (await self.client.application_info()).owner
         description = \

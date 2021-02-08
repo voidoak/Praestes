@@ -1,3 +1,5 @@
+from datetime import datetime as dt
+
 def dt_format(dt_obj):
     """ my own preferential formatting of a datetime object. """
     return dt_obj.strftime("%H:%M, %Y.%m.%d")
@@ -13,6 +15,7 @@ def guild_repr(ctx):
     gld = ctx.guild
     bots = 0
     emj, a_emj = 0, 0
+    created = gld.created_at
     for emoji in gld.emojis:
         if emoji.animated: a_emj += 1
         else: emj += 1
@@ -25,6 +28,7 @@ def guild_repr(ctx):
 
     description = "```yaml\n" \
     f"---\n- name: {gld.name}\n- owner: {gld.owner.name} ({gld.owner.id})\n- id: {gld.id}\n" \
+    f"- created: {dt_format(created)} (~{(dt.utcnow() - created).days} days)\n" \
     f"---\n- members: {gld.member_count - bots} humans, {bots} bots\n- roles: {len(gld.roles)}\n- emojis: {emj}, {a_emj} animated\n" \
     f"---\n- text channels: {len(gld.text_channels)}\n- voice channels: {len(gld.voice_channels)}\n" \
     f"- verif. level: {gld.verification_level}\n- region: {gld.region}\n---\n```" \

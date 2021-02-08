@@ -8,6 +8,22 @@ class Moderation(commands.Cog):
     async def cog_check(self, ctx):
         return not ctx.guild is None
 
+    @commands.command(aliases=["cr"])
+    @commands.has_permissions(manage_roles=True)
+    async def createrole(self, ctx, name:str="new role", clr:discord.Colour=0, pos:int=1, perms:int=0):
+        """ create a role, with optional colour, position, and permissions code """
+        _perms = discord.Permissions()
+        _perms.value = perms
+
+        clr = clr or discord.Colour(0)
+        role = await ctx.guild.create_role(name=name, colour=clr, permissions=_perms)
+        pos = pos if pos > 1 else 1
+        await role.edit(position=pos)
+
+        embed = discord.Embed(title="Created role", colour=clr)
+        embed.description = f"```yaml\n---\nname: {name}\nid: {role.id}\ncolour: {str(clr)}\nposition: {pos}\npermissions: {_perms.value}\n---\n```"
+        await ctx.send(embed=embed)
+
     @commands.command(aliases=["del"])
     @commands.has_permissions(manage_messages=True)
     @commands.cooldown(1, 5, type=commands.BucketType.user)
