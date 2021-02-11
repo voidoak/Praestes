@@ -23,6 +23,7 @@ If you believe *Praestes* could be a good utility for your server, consider [add
 
 #### *Examples*
 *Click any of the following to see a screenshot example of features:*
+
 [Permissions command.](https://media.discordapp.net/attachments/788211981051101214/808446564213194802/unknown.png)
 
 [Example of bot missing permissions.](https://media.discordapp.net/attachments/788211981051101214/808447457666793482/unknown.png)
