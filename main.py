@@ -36,7 +36,7 @@ class Praestes(commands.Bot):
     async def on_ready(self):
         print(f"{self.user.name} brought online at {dt.now()}.")
         self.invite = f"https://discord.com/oauth2/authorize?client_id={self.user.id}&scope=bot&permissions=2147483647"
-        activity = discord.Activity(type=discord.ActivityType.watching, name="the lost... protecting the weary.")
+        activity = discord.Activity(type=discord.ActivityType.watching, name=f"{self.config['prefixes'][0]}help")
         await self.change_presence(status=discord.Status.dnd, activity=activity)
 
 

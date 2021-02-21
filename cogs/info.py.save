@@ -70,8 +70,6 @@ class Info(commands.Cog):
         f"top role: {member.top_role} ({member.top_role.id})\n" \
         f"role count: {len(member.roles)}\n---\n" \
         f"bot: {member.bot}\n" \
-        f"online status: {member.status}\n" \
-        f"custom status: {activity}" \
 
         embed = discord.Embed(
             title = f"@{member.name}#{member.discriminator}",
