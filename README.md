@@ -12,6 +12,8 @@
 2. *intuitive moderation commands, well suited for keeping your server secure.*
 3. *useful utility cog, putting powerful tools into the hands of its users.*
 
+![example gif](https://github.com/voidoakenduck/Praestes/blob/main/zRTMTXdBVb.gif)
+
 #### **Conclusion:**
 The *Praestes Project* does not believe in the collection of server or user data, for either private or 3rd party usage.
 
