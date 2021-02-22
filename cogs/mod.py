@@ -1,5 +1,7 @@
 import discord, asyncio
 from discord.ext import commands
+import asyncio as aio
+
 
 class Moderation(commands.Cog):
     def __init__(self, client):
@@ -89,8 +91,44 @@ class Moderation(commands.Cog):
         embed.set_footer(text=f"Banned by {ctx.author}\nUID: {user.id}")
         await ctx.send(embed=embed)
 
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def massban(self, ctx, *, users):
+        """ remove all members passed in, space delimited. may take a few """ \
+        """moments to complete due to rate limiting. """
+        converter = commands.UserConverter()
+        message = "```diff\n"
+        confirmation = await ctx.reply("Attempting mass ban...")
+        embed = discord.Embed(title="Mass ban")
+
+        for user in users.split():
+            try:
+                user = await converter.convert(ctx, user)
+            except commands.UserNotFound:
+                message += f"- User {user} not found.\n"
+                continue
+
+            if user:=discord.utils.get(ctx.guild.members, id=user.id):
+                if user.id == ctx.bot.user.id or user.id == ctx.guild.owner.id \
+                        or self.member_remove_fail(ctx, user):
+                    print(ctx.author.id, user.id)
+                    message += f"- Could not ban {user}.\n"
+                    continue
+
+            message += f"+ Banned {user}.\n"
+            embed.description = message + "\n```"
+            await confirmation.edit(content="", embed=embed)
+            await ctx.guild.ban(discord.Object(id=user.id))
+            await aio.sleep(0.5)
+
+        embed.description = message + "\n+ Completed.\n```"
+        await confirmation.edit(content="", embed=embed)
+
     def member_remove_fail(self, ctx, member:discord.Member):
-        return not ctx.author.top_role > member.top_role or ctx.author.id == member.id
+        first = ctx.author.top_role <= member.top_role
+        second = ctx.author.id == member.id
+        print(first, second)
+        return ctx.author.top_role <= member.top_role or ctx.author.id == member.id
 
 
 def setup(client):

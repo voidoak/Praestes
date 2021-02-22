@@ -28,7 +28,7 @@ The *Praestes Project* does not believe in the collection of server or user data
 
 #### TODO
 * [ ] Role perms command
-* [ ] Mass ban/kick commands
+* [x] Mass ban command
 * [ ] Mute/unmute command
 * [ ] IP data command
 
