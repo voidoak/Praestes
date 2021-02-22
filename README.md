@@ -26,15 +26,11 @@ If you believe *Praestes* could be a good utility for your server, consider [add
 #### *Examples*
 *Click any of the following to see a screenshot example of features:*
 
-[Permissions command.](https://media.discordapp.net/attachments/788211981051101214/808446564213194802/unknown.png)
-
-[Example of bot missing permissions.](https://media.discordapp.net/attachments/788211981051101214/808447457666793482/unknown.png)
-
-[User info command.](https://media.discordapp.net/attachments/796620072608333834/808448449422032906/unknown.png?width=565&height=676)
-
-[Help command examples.](https://media.discordapp.net/attachments/788211981051101214/808451341995081788/unknown.png?width=478&height=676)
-
-[Colour command](https://media.discordapp.net/attachments/788211981051101214/808451995828617246/unknown.png)
+* [Permissions command.](https://media.discordapp.net/attachments/788211981051101214/808446564213194802/unknown.png)
+* [Example of bot missing permissions.](https://media.discordapp.net/attachments/788211981051101214/808447457666793482/unknown.png)
+* [User info command.](https://media.discordapp.net/attachments/796620072608333834/808448449422032906/unknown.png?width=565&height=676)
+* [Help command examples.](https://media.discordapp.net/attachments/788211981051101214/808451341995081788/unknown.png?width=478&height=676)
+* [Colour command](https://media.discordapp.net/attachments/788211981051101214/808451995828617246/unknown.png)
 
 #### TODO
 * [ ] Role perms command
