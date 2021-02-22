@@ -36,4 +36,10 @@ If you believe *Praestes* could be a good utility for your server, consider [add
 
 [Colour command](https://media.discordapp.net/attachments/788211981051101214/808451995828617246/unknown.png)
 
+#### TODO
+* [ ] Role perms command
+* [ ] Mass ban/kick commands
+* [ ] Mute/unmute command
+* [ ] IP data command
+
 ###### Questions or issues? Contact the project on Discord: `@void*#1507`, `@numine#9140`.
