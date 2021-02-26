@@ -1,6 +1,8 @@
 config.yaml
 *.json
+
 benv/
-logging/
+venv/
+
 __pycache__/
 *.pyc

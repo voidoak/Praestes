@@ -1,5 +1,4 @@
 aiohttp==3.6.3
 decorator==4.4.2
 discord.py==1.6.0
-pip==20.3.3
 PyYAML==5.3.1
