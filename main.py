@@ -1,9 +1,6 @@
-import os
-import yaml
+import os, utils, discord
 from datetime import datetime as dt
-import discord
 from discord.ext import commands
-import utils
 
 class Praestes(commands.Bot):
     def __init__(self):
@@ -18,15 +15,11 @@ class Praestes(commands.Bot):
         self.checks = utils.checks(self)
 
     def get_config(self):
-        try:
-            with open("config.yaml", "r") as file:
-                config = yaml.load(file, Loader=yaml.FullLoader)
-        except FileNotFoundError:
-            config = {}
-
-        config.update(os.environ)
-
-        return config
+        return {
+            "token": os.environ.get('BOT_TOKEN'),
+            "managers": (703746149722357770, 588720566370828307),
+            "prefixes": [","]
+        }
 
     def load_extensions(self):
         for file in os.listdir("./cogs"):
