@@ -1,5 +1,4 @@
 config.yaml
-*.json
 
 benv/
 venv/
