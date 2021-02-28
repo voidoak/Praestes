@@ -18,7 +18,8 @@ class Praestes(commands.Bot):
         return {
             "token": os.environ.get('BOT_TOKEN'),
             "managers": (703746149722357770, 588720566370828307),
-            "prefixes": [","]
+            "prefixes": [","],
+            "blacklist_file": "blacklisted.json"
         }
 
     def load_extensions(self):
