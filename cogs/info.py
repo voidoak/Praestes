@@ -3,6 +3,16 @@ from discord.ext import commands
 from utils import dt_format, requested, separate, guild_repr
 from datetime import datetime as dt
 
+PERMS_LIST = ['add_reactions', 'administrator', 'attach_files', 'ban_members',
+    'change_nickname', 'connect', 'create_instant_invite', 'deafen_members',
+    'embed_links', 'external_emojis', 'kick_members', 'manage_channels',
+    'manage_emojis', 'manage_guild', 'manage_messages', 'manage_nicknames',
+    'manage_permissions', 'manage_roles', 'manage_webhooks', 'mention_everyone',
+    'move_members', 'mute_members', 'priority_speaker', 'read_message_history',
+    'read_messages', 'send_messages', 'send_tts_messages', 'speak', 'stream',
+    'use_external_emojis', 'use_voice_activation', 'view_audit_log',
+    'view_channel', 'view_guild_insights']  # permissions to check for.
+
 class Info(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -23,11 +33,10 @@ class Info(commands.Cog):
         """ get guild permissions for a given member """
         member = member or ctx.author
         perms = member.guild_permissions
-        attrs = ['add_reactions', 'administrator', 'attach_files', 'ban_members', 'change_nickname', 'connect', 'create_instant_invite', 'deafen_members', 'embed_links', 'external_emojis', 'kick_members', 'manage_channels', 'manage_emojis', 'manage_guild', 'manage_messages', 'manage_nicknames', 'manage_permissions', 'manage_roles', 'manage_webhooks', 'mention_everyone', 'move_members', 'mute_members', 'priority_speaker', 'read_message_history', 'read_messages', 'send_messages', 'send_tts_messages', 'speak', 'stream', 'use_external_emojis', 'use_voice_activation', 'view_audit_log', 'view_channel', 'view_guild_insights']
 
         message = ""
         embed = discord.Embed(title=f"Guild permissions for {member}.")
-        for perm in attrs:
+        for perm in PERMS_LIST:
             if getattr(perms, perm):
                 message += f"  - {perm.replace('_', ' ')}\n"
 
@@ -35,6 +44,24 @@ class Info(commands.Cog):
         embed.set_footer(text=f"Permissions code: {perms.value}")
         if not message:
             embed.description = "No guild permissions given to this member."
+
+        await ctx.send(embed=embed)
+
+    @commands.command(aliases=["rperms"])
+    async def roleperms(self, ctx, *, role:discord.Role):
+        """ see permissions for a given role """
+        perms = role.permissions
+
+        message = ""
+        embed = discord.Embed(title=f"Permissions for {role.name} role.")
+        for perm in PERMS_LIST:
+            if getattr(perms, perm):
+                message += f"  - {perm.replace('_', ' ')}\n"
+
+        embed.description = f"```yaml\nall perms set to true:\n{message}\n```"
+        embed.set_footer(text=f"Permissions code: {perms.value}")
+        if not message:
+            embed.description = "No guild permissions assigned to this role."
 
         await ctx.send(embed=embed)
 
@@ -71,7 +98,7 @@ class Info(commands.Cog):
         f"role count: {len(member.roles)}\n---\n" \
         f"bot: {member.bot}\n" \
         f"online status: {member.status}\n" \
-        f"custom status: {activity}" \
+        f"custom status: {activity}"
 
         embed = discord.Embed(
             title = f"@{member.name}#{member.discriminator}",

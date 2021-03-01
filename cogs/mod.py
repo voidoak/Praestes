@@ -1,7 +1,5 @@
-import discord, asyncio
+import discord, asyncio, utils
 from discord.ext import commands
-import asyncio as aio
-
 
 class Moderation(commands.Cog):
     def __init__(self, client):
@@ -9,6 +7,33 @@ class Moderation(commands.Cog):
 
     async def cog_check(self, ctx):
         return not ctx.guild is None
+
+    @commands.command()
+    @commands.has_permissions(view_audit_log=True)
+    async def listbans(self, ctx, mod:discord.User=None):
+        """ list bans a given user has made """
+        mod = mod or ctx.author
+        bans = await ctx.guild.audit_logs(
+            user=mod, action=discord.AuditLogAction.ban
+        ).flatten()
+
+        bans = utils.separate(bans, 20)
+
+        if not bans:
+            return await ctx.reply(f"There are no bans by **{mod}**.")
+
+        for i, b_list in enumerate(bans):
+            message = "".join(
+                f"{n + 1}: {b.target} - {utils.dt_format(b.created_at)}\n" \
+                for n,b in enumerate(b_list)  # fancify it uwu
+            )
+            embed = discord.Embed(description=f"```yaml\n{message}\n```")
+
+            if i == 0:
+                embed.title = f"Bans by {mod}"  # set first message to have title
+
+            await ctx.send(embed=embed)
+            await asyncio.sleep(0.51)
 
     @commands.command(aliases=["cr"])
     @commands.has_permissions(manage_roles=True)
@@ -133,4 +158,3 @@ class Moderation(commands.Cog):
 
 def setup(client):
     client.add_cog(Moderation(client))
-

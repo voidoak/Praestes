@@ -8,14 +8,21 @@ class Help(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command(self, ctx):
+        # on cog reload, these attributes are lost; as such,
+        # reinitialize them on first message after the reload.
         if not getattr(self, "visible_cogs", None) is None:
             return
         self.visible_cogs = { k:[] for k in ["info", "moderation", "utility"] }
-        for cmd in self.client.commands:
+        for cmd in self.client.commands:  # get all commands and pass into cog
             cog = cmd.cog_name
             if cog:
                 if (cog:=cog.lower()) in self.visible_cogs.keys():
                     self.visible_cogs[cog].append(cmd)
+
+        for cog in self.visible_cogs.keys():  # sort cog by command names
+            self.visible_cogs[cog] = sorted(
+                self.visible_cogs[cog], key=(lambda c: c.name)
+            )
 
     @commands.command()
     async def help(self, ctx, *, cmd_or_cog:str="default"):
@@ -50,7 +57,7 @@ class Help(commands.Cog):
 
     def generate_cog_embed(self, cog):
         """ generates informatic embed for given cog """
-        commands = "\n".join(f"{cmd.name}: {cmd.help}" for cmd in self.visible_cogs[cog])
+        commands = "\n-\n".join(f"{cmd.name}: {cmd.help}" for cmd in self.visible_cogs[cog])
         embed = discord.Embed(title="Cog info")
         embed.description = f"```yaml\n---\n{commands}\n---\n```"
         embed.set_footer(text=f"Run help [command] to learn more about a command")
