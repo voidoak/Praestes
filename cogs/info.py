@@ -3,6 +3,8 @@ from discord.ext import commands
 from utils import dt_format, requested, separate, guild_repr
 from datetime import datetime as dt
 
+from prettytable import PrettyTable as PT
+
 PERMS_LIST = ['add_reactions', 'administrator', 'attach_files', 'ban_members',
     'change_nickname', 'connect', 'create_instant_invite', 'deafen_members',
     'embed_links', 'external_emojis', 'kick_members', 'manage_channels',
@@ -64,6 +66,28 @@ class Info(commands.Cog):
             embed.description = "No guild permissions assigned to this role."
 
         await ctx.send(embed=embed)
+
+    @commands.command(aliases=["roles"])
+    async def rolestats(self, ctx):
+        """ get simple stats on all roles in server """
+        roles = ctx.guild.roles
+        role_groups = separate(roles, 30)
+        for i, rg in enumerate(role_groups):
+            pt = PT()
+            pt.field_names = ["role", "members", "%"]  # add field names for rows
+            pt.align = "l"  # left align PrettyTable
+            embed = discord.Embed()
+            for role in rg:
+                name = role.name[:15] + ("..." if len(role.name) > 15 else "")  # keep role name < 15 chars
+                members = len(role.members)  # get role member count
+                percentage = len(role.members) / len(ctx.guild.members) * 100  # get members:server members ratio
+
+                pt.add_row([name, members, f"{(percentage):.2f}"])  # add to PT
+
+            if i == 0: embed.title = "Role stats"
+            embed.description = f"```\n{pt}\n```"
+            await ctx.send(embed=embed)
+            await asyncio.sleep(0.51)
 
     @commands.command(aliases=["inv"])
     async def invite(self, ctx):

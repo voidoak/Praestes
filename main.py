@@ -23,6 +23,7 @@ class Praestes(commands.Bot):
         }
 
     def load_extensions(self):
+        self.load_extension("jishaku")
         for file in os.listdir("./cogs"):
             if file.endswith(".py"):
                 self.load_extension(f"cogs.{file[:-3]}")
