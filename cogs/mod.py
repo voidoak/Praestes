@@ -95,7 +95,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member:discord.Member, *, reason:str="no given reason"):
         """ kick a given user, by ID or mention """
-        if self.member_remove_fail(ctx, user): return
+        if self.member_remove_fail(ctx, member): return
 
         await member.kick()
         embed = discord.Embed(title=f"Reason for kick:", description=reason)
