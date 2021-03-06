@@ -7,7 +7,9 @@ def dt_format(dt_obj):
 
 def requested(ctx):
     """ preferential formatting for embed titles """
-    return f"Requested by {ctx.author.name}#{ctx.author.discriminator}"
+    name = f"Requested by {ctx.author.name}#{ctx.author.discriminator}"
+    icon_url = ctx.author.avatar_url
+    return { "name": name, "icon_url": icon_url }
 
 
 def guild_repr(ctx):

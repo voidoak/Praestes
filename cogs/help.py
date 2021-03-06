@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from utils import requested
+import utils
 
 class Help(commands.Cog):
     def __init__(self, client):
@@ -37,10 +37,10 @@ class Help(commands.Cog):
             message = "\n\n".join(f"{cog}: {len(cmds)} commands" for cog, cmds in self.visible_cogs.items())
 
             embed = discord.Embed(description = f"```yaml\n---\n{message}\n---\n```")
-            embed.set_author(name=requested(ctx), icon_url=ctx.author.avatar_url)
+            embed.set_author(**utils.requested(ctx))
             embed.set_footer(text="Run help [cog] to get a list of commands in a cog")
 
-        embed.set_author(name=requested(ctx), icon_url=ctx.author.avatar_url)
+        embed.set_author(**utils.requested(ctx))
         return await ctx.send(embed=embed)
 
     def generate_command_embed(self, cmd):

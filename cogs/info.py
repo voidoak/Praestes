@@ -129,7 +129,7 @@ class Info(commands.Cog):
             description = f"```yaml\n---\n{message}\n---\n```"
         )
         embed.set_image(url=member.avatar_url)
-        embed.set_author(name=requested(ctx), icon_url=ctx.author.avatar_url)
+        embed.set_author(**requested(ctx))
         embed.set_footer(text=f"UID: {member.id}")
         await ctx.send(embed=embed)
 
@@ -151,7 +151,7 @@ class Info(commands.Cog):
         attrs = "\n".join([f"{attr}: {getattr(role, attr)}" for attr in attrs])
 
         embed = discord.Embed(title=f"Role info", colour=role.colour)
-        embed.set_author(name=requested(ctx), icon_url=ctx.author.avatar_url)
+        embed.set_author(**requested(ctx))
         embed.description = f"```yaml\n---\nname: {role.name}\n{created}\n{members}\n---\n{attrs}\n---\n```"
         await ctx.send(embed=embed)
 
@@ -161,7 +161,7 @@ class Info(commands.Cog):
         """ get info on the guild in context """
         embed = discord.Embed(title="Server info")
         embed.description = guild_repr(ctx)
-        embed.set_author(name=requested(ctx), icon_url=ctx.author.avatar_url)
+        embed.set_author(**requested(ctx))
         embed.set_image(url=ctx.guild.icon_url)
         await ctx.send(embed=embed)
 

@@ -22,6 +22,12 @@ class Praestes(commands.Bot):
             "blacklist_file": "blacklisted.json"
         }
 
+    async def is_owner(self, user:discord.User):
+        if user.id in self.client.config["managers"]:
+            return True  # managers have owner permissions
+
+        return await super().is_owner(user)
+
     def load_extensions(self):
         self.load_extension("jishaku")
         for file in os.listdir("./cogs"):

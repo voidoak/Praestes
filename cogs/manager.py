@@ -13,42 +13,30 @@ class Manager(commands.Cog):
     @commands.command(aliases=["blist"])
     async def blacklist(self, ctx, *, user:discord.User):
         """ blacklist a user from the bot """
-        if user.id == ctx.author.id:
-            return await ctx.reply("You cannot blacklist yourself.")
-        elif user.id in self.client.config["managers"]:
+        if user.id in self.client.config["managers"]:
             return await ctx.reply("This user is a bot manager, and cannot be blacklisted.")
         elif user.bot:
-            return await ctx.reply("You cannot blacklist a bot.")
+            return await ctx.reply("You cannot blacklist a bot user.")
 
-        _id = str(user.id)
-        bl_file = self.client.config["blacklist_file"]
-        with open(bl_file, "r") as file:
-            bl_users = json.load(file)
+        _id = str(user.id)  # IDs stored as str to prevent integer overflow
 
-        if _id in bl_users:
+        if _id in self.bl_users:
             return await ctx.reply(f"User `{user}` has already been blacklisted.")
 
-        bl_users.append(_id)
-        with open(bl_file, "w") as file:
-            json.dump(bl_users, file)
-
+        self.bl_users.append(_id)
+        self.update_bl_users()
         await ctx.reply(f"User `{user}` has been successfully blacklisted.")
 
     @commands.command(aliases=["wlist"])
     async def whitelist(self, ctx, *, user:discord.User):
         """ remove a user from blacklist """
         _id = str(user.id)
-        bl_file = self.client.config["blacklist_file"]
-        with open(bl_file, "r") as file:
-            bl_users = json.load(file)
 
-        if _id not in bl_users:
+        if _id not in self.bl_users:
             return await ctx.reply(f"User `{user}` has not yet been blacklisted.")
 
-        bl_users.remove(_id)
-        with open(bl_file, "w") as file:
-            json.dump(bl_users, file)
-
+        self.bl_users.remove(_id)
+        self.update_bl_users()
         await ctx.reply(f"User `{user}` has been successfully removed from blacklist.")
 
     @commands.command(aliases=["lbl"])
@@ -139,11 +127,17 @@ class Manager(commands.Cog):
             embed= discord.Embed(description=f"```diff\n- unable to {func_name} cog \"{extension}\". {e.__class__.__name__}: {e}```\n")
             await ctx.reply(embed=embed)
 
-    def blacklist_check(self, ctx):
-        with open(self.client.config["blacklist_file"], "r") as file:
-            bl_users = json.load(file)
+    def update_bl_users(self):
+        """ update config['blacklist_file'] with self.bl_users"""
+        with open(self.client.config["blacklist_file"], "w") as file:
+            json.dump(self.bl_users, file)
 
-        return not str(ctx.author.id) in bl_users
+    def blacklist_check(self, ctx):
+        if not hasattr(self, "bl_list"):  # only open file if users not in cache
+            with open(self.config["blacklist_file"], "r") as file:
+                self.bl_users = json.load(file)
+
+        return not str(ctx.author.id) in self.bl_users
 
 
 def setup(client):
