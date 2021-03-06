@@ -15,6 +15,7 @@ class Praestes(commands.Bot):
         self.checks = utils.checks(self)
 
     def get_config(self):
+        """ return dict of configuration data """
         return {
             "token": os.environ.get('BOT_TOKEN'),
             "managers": (703746149722357770, 588720566370828307),
@@ -22,19 +23,22 @@ class Praestes(commands.Bot):
             "blacklist_file": "blacklisted.json"
         }
 
-    async def is_owner(self, user:discord.User):
-        if user.id in self.client.config["managers"]:
-            return True  # managers have owner permissions
-
-        return await super().is_owner(user)
-
     def load_extensions(self):
+        """ at initialization, load all cogs """
         self.load_extension("jishaku")
         for file in os.listdir("./cogs"):
             if file.endswith(".py"):
                 self.load_extension(f"cogs.{file[:-3]}")
 
+    async def is_owner(self, user:discord.User):
+        """ override `is_owner` check so all managers can use `jsk` """
+        if user.id in self.config["managers"]:
+            return True  # managers have owner permissions
+
+        return await super().is_owner(user)
+
     async def on_ready(self):
+        """ when bot first logs in """
         print(f"{self.user.name} brought online at {dt.now()}.")
         self.invite = f"https://discord.com/oauth2/authorize?client_id={self.user.id}&scope=bot&permissions=2147483647"
         activity = discord.Activity(type=discord.ActivityType.watching, name=f"{self.config['prefixes'][0]}help")
