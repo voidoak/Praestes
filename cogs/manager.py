@@ -134,7 +134,7 @@ class Manager(commands.Cog):
 
     def blacklist_check(self, ctx):
         if not hasattr(self, "bl_list"):  # only open file if users not in cache
-            with open(self.config["blacklist_file"], "r") as file:
+            with open(self.client.config["blacklist_file"], "r") as file:
                 self.bl_users = json.load(file)
 
         return not str(ctx.author.id) in self.bl_users
