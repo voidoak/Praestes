@@ -11,7 +11,7 @@ class EmbedGenerator(commands.Cog):
     @flags.add_flag("--image", default=None)
     @flags.add_flag("--url", default=None)
     @flags.add_flag("--thumbnail", default=None)
-    @flags.add_flag("--color", type=discord.Colour, default=None)
+    @flags.add_flag("--color", type=discord.Colour, default=0)
     @flags.command(name="embed", aliases=["emb"])
     @commands.has_permissions(manage_messages=True)
     async def create_embed(self, ctx, **flags):
