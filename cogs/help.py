@@ -58,6 +58,8 @@ class Help(commands.Cog):
     def generate_cog_embed(self, cog):
         """ generates informatic embed for given cog """
         commands = "\n-\n".join(f"{cmd.name}: {cmd.help}" for cmd in self.visible_cogs[cog])
+        if cog == "info":
+            commands += f"\n-\nembed: generate an embed"
         embed = discord.Embed(title="Cog info")
         embed.description = f"```yaml\n---\n{commands}\n---\n```"
         embed.set_footer(text=f"Run help [command] to learn more about a command")

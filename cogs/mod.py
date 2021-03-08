@@ -118,6 +118,13 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
+    async def unban(self, ctx, user:discord.User):
+        """ revoke ban from a banned user """
+        await ctx.guild.unban(user)
+        await ctx.send(f"Unbanned `{user.id}`.")
+
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
     async def massban(self, ctx, *, users):
         """ remove all members passed in, space delimited. may take a few """ \
         """moments to complete due to rate limiting. """

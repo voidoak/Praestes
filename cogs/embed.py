@@ -5,7 +5,7 @@ class EmbedGenerator(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @flags.add_flag("--title", default=None)  # set each to None to be evaluated
+    @flags.add_flag("--title", default=None)  # set each to False-like to be evaluated
     @flags.add_flag("--description", default=None)
     @flags.add_flag("--footer", default=None)
     @flags.add_flag("--image", default=None)
