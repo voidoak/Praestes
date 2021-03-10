@@ -18,9 +18,9 @@ class Praestes(commands.Bot):
         """ return dict of configuration data """
         return {
             "token": os.environ.get('BOT_TOKEN'),
-            "managers": (703746149722357770, 588720566370828307),
+            "managers": (703746149722357770, 588720566370828307),  # IDs of manager accounts
             "prefixes": [","],
-            "blacklist_file": "blacklisted.json"
+            "blacklist_file": "blacklisted.json"  # file where blacklisted UIDs are stored
         }
 
     def load_extensions(self):

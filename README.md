@@ -27,7 +27,7 @@ The *Praestes Project* does not believe in the collection of server or user data
 * [Colour command](https://media.discordapp.net/attachments/788211981051101214/808451995828617246/unknown.png)
 
 #### TODO
-* [ ] Role perms command
+* [x] Role perms command
 * [x] Mass ban command
 * [ ] Mute/unmute command
 * [ ] IP data command
