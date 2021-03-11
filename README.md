@@ -2,7 +2,7 @@
 
 *A utility and moderation bot for Discord.*
 
-## **Praestes' prime directive:**
+## **Praestes' prime directive**
 
 * `Be reliable; predictability increases ease of use.`
 * `Have power through intuitiveness of features.`
@@ -31,9 +31,9 @@ The *Praestes Project* does not believe in the collection of server or user data
 
 #### TODO
 
-* [x] Role perms command
-* [x] Mass ban command
-* [ ] Mute/unmute command
-* [ ] IP data command
+- [x] Role perms command
+- [x] Mass ban command
+- [ ] Mute/unmute command
+- [ ] IP data command
 
 *Questions or issues? Contact the project on [Discord](https://discord.gg/5d7BzA6pWa):* `@void*#1507`, `@numine#9140`.
