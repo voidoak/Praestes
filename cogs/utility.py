@@ -1,10 +1,10 @@
 import discord, base64
 from discord.ext import commands
-from random import randint
-
+import random
 
 class Utility(commands.Cog):
     def __init__(self, client):
+        """initialize Utility cog"""
         self.client = client
         self.encodings = ["b16", "b32", "b64", "b85"]
 
@@ -14,21 +14,21 @@ class Utility(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 5, type=commands.BucketType.user)
     async def say(self, ctx, *, message:str):
-        """ safely make the bot repeat what you say """
+        """safely make the bot repeat what you say"""
         embed = discord.Embed(description=message, colour=ctx.author.top_role.colour)
         embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["clr", "color"])
     async def colour(self, ctx, clr:discord.Colour=None):
-        """ see a passed in colour or leave blank for a random colour """
+        """see a passed in colour or leave blank for a random colour"""
         clr = clr or discord.Colour.random()
         embed = discord.Embed(title=str(clr), colour=clr, url=f"http://google.com/search?q={str(clr).replace('#', '%23')}&tbm=isch")
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["roll"])
     async def dice(self, ctx, _type:str):
-        """ roll dice """
+        """roll dice"""
         if _type.count("d") != 1:
             return await ctx.reply(
             "The type of and amount of dice should be in this format: `nds`," \
@@ -54,14 +54,14 @@ class Utility(commands.Cog):
         elif sides > 100:
             return await ctx.reply("Maximum die side count is 20.")
 
-        rolled_score = sum(randint(1, sides) for i in range(amount))
+        rolled_score = sum(random.uniform(1, sides) for i in range(amount))
         embed = discord.Embed(title=f"Rolled {_type} :game_die:", colour=discord.Colour.random())
         embed.description = f"You roll {_type}, and got **{rolled_score}**."
         await ctx.reply(embed=embed)
 
     @commands.command(name="encode", aliases=["enc"])
     async def str_to_encoding(self, ctx, encoding:str, *, _input:str):
-        """ encode a passed in string to encodings b16, b32, b64, or b85 """
+        """encode a passed in string to encodings b16, b32, b64, or b85"""
         output = self.enc_or_dec("encode", encoding, _input)
         embed = discord.Embed(title=f"Encoded input to {encoding}")
         embed.description = f"```\n{output}\n```"
@@ -69,14 +69,14 @@ class Utility(commands.Cog):
 
     @commands.command(name="decode", aliases=["dec"])
     async def encoding_to_str(self, ctx, encoding:str, *, _input:str):
-        """ decode a string from an encoding of either b16, b32, b64, or b85 """
+        """decode a string from an encoding of either b16, b32, b64, or b85"""
         output = self.enc_or_dec("decode", encoding, _input)
         embed = discord.Embed(title=f"Decoded {encoding} input to utf-8")
         embed.description = f"```\n{output}\n```"
         await ctx.reply(embed=embed)
 
     def enc_or_dec(self, conversion_type, encoding, _input):
-        """ handle encoding/decoding """
+        """handle encoding/decoding"""
         if encoding not in self.encodings:
             raise commands.BadArgument(f"improper encoding for {conversion_type} command: {encoding}")
 

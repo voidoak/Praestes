@@ -4,6 +4,7 @@ import utils
 
 class Help(commands.Cog):
     def __init__(self, client):
+        """initialize the Help cog"""
         self.client = client
 
     @commands.Cog.listener()
@@ -26,7 +27,7 @@ class Help(commands.Cog):
 
     @commands.command()
     async def help(self, ctx, *, cmd_or_cog:str="default"):
-        """ display the help embed """
+        """display the help embed"""
         # separate cog/command embed configuration
         cmd_or_cog = cmd_or_cog.lower()
         if (cog:=cmd_or_cog) in self.visible_cogs.keys():
@@ -44,7 +45,7 @@ class Help(commands.Cog):
         return await ctx.send(embed=embed)
 
     def generate_command_embed(self, cmd):
-        """ generates informatic embed for given command """
+        """generates informatic embed for given command"""
         description = \
         f"name: {cmd.name}\ncog: {cmd.cog_name}\ndescription:\n {cmd.short_doc}\n\n" \
         f"aliases:\n  - {', '.join(cmd.aliases) if cmd.aliases else 'None'}\n" + \
@@ -56,7 +57,7 @@ class Help(commands.Cog):
         return embed
 
     def generate_cog_embed(self, cog):
-        """ generates informatic embed for given cog """
+        """generates informatic embed for given cog"""
         commands = "\n-\n".join(f"{cmd.name}: {cmd.help}" for cmd in self.visible_cogs[cog])
         embed = discord.Embed(title="Cog info")
         embed.description = f"```yaml\n---\n{commands}\n---\n```"
@@ -64,7 +65,7 @@ class Help(commands.Cog):
         return embed
 
     def get_command(self, command:str):
-        """ Returns a Command object, based on string. Works on either an alias or name. """
+        """returns a Command object, based on string. Works on either an alias or name."""
         for cmd in self.client.commands:
             if command in [cmd.name] + cmd.aliases:
                 return cmd

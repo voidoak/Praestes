@@ -14,7 +14,7 @@ def ignorable(error):
 
 class Errors(commands.Cog):
     def __init__(self, client):
-        """error handling cog"""
+        """initialize Errors cog"""
         self.client = client
 
     @commands.Cog.listener()
@@ -26,7 +26,7 @@ class Errors(commands.Cog):
         embed = discord.Embed()
 
         if isinstance(cause, discord.Forbidden):
-            embed.description = "```diff\n- I don't have permission to do that, either due to the role hierarchy or my lack of relevant perms.\n```"       
+            embed.description = "```diff\n- I don't have permission to do that, either due to the role hierarchy or my lack of relevant perms.\n```"
         else:
             embed.description = f"```diff\n- {error.__class__.__name__}: {error}\n```"
 

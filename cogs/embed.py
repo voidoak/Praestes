@@ -3,6 +3,7 @@ from discord.ext import flags, commands
 
 class EmbedGenerator(commands.Cog):
     def __init__(self, client):
+        """initialize the EmbedGenerator cog"""
         self.client = client
 
     @flags.add_flag("--title", default=None)  # set each to False-like to be evaluated
@@ -15,9 +16,9 @@ class EmbedGenerator(commands.Cog):
     @flags.command(name="embed", aliases=["emb"])
     @commands.has_permissions(manage_messages=True)
     async def create_embed(self, ctx, **flags):
-        """ create an embed, using flags. surround values with quotations
+        """create an embed, using flags. surround values with quotations
 
-        for example: `embed --title 'this is the title' --description 'etc'` """
+        for example: `embed --title 'this is the title' --description 'etc'`"""
         embed = discord.Embed(**flags)
 
         if ftr:=flags["footer"]:

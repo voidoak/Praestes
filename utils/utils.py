@@ -2,19 +2,19 @@ import os
 from datetime import datetime as dt
 
 def dt_format(dt_obj):
-    """ my own preferential formatting of a datetime object. """
+    """my own preferential formatting of a datetime object."""
     return dt_obj.strftime("%H:%M, %Y.%m.%d")
 
 
 def requested(ctx):
-    """ preferential formatting for embed titles """
+    """preferential formatting for embed titles"""
     name = f"Requested by {ctx.author.name}#{ctx.author.discriminator}"
     icon_url = ctx.author.avatar_url
     return { "name": name, "icon_url": icon_url }
 
 
 def get_config():
-    """ return dict of configuration data """
+    """return dict of configuration data"""
     return {
         "token": os.environ.get('BOT_TOKEN'),
         "managers": (703746149722357770, 588720566370828307),  # IDs of manager accounts
@@ -23,7 +23,7 @@ def get_config():
     }
 
 def guild_repr(ctx):
-    """ get guild info in a formatted string  """
+    """get guild info in a formatted string"""
     gld = ctx.guild
     bots = 0
     emj, a_emj = 0, 0
@@ -52,7 +52,7 @@ def guild_repr(ctx):
 
 
 def separate(lis, n):
-    """ separate a list into groups of n, in a near 'square' shape """
+    """separate a list into groups of n, in a near 'square' shape"""
     dm = divmod(len(lis), n)
     s = [[] for i in range(dm[0] +  bool(dm[1]))]
     for i, item in enumerate(lis):

@@ -4,6 +4,7 @@ from utils import separate
 
 class Manager(commands.Cog):
     def __init__(self, client):
+        """initialize Manager cog"""
         self.client = client
         self.client.add_check(self.blacklist_check)
 
@@ -12,7 +13,7 @@ class Manager(commands.Cog):
 
     @commands.command(aliases=["blist"])
     async def blacklist(self, ctx, *, user:discord.User):
-        """ blacklist a user from the bot """
+        """blacklist a user from the bot"""
         if user.id in self.client.config["managers"]:
             return await ctx.reply("This user is a bot manager, and cannot be blacklisted.")
         elif user.bot:
@@ -29,7 +30,7 @@ class Manager(commands.Cog):
 
     @commands.command(aliases=["wlist"])
     async def whitelist(self, ctx, *, user:discord.User):
-        """ remove a user from blacklist """
+        """remove a user from blacklist"""
         _id = str(user.id)
 
         if _id not in self.bl_users:
@@ -41,7 +42,7 @@ class Manager(commands.Cog):
 
     @commands.command(aliases=["lbl"])
     async def listblisted(self, ctx):
-        """ list blacklisted members """
+        """list blacklisted members"""
         with open(self.client.config["blacklist_file"]) as file:
             bl_users = json.load(file)
 
@@ -63,7 +64,7 @@ class Manager(commands.Cog):
 
     @commands.command()
     async def botwarn(self, ctx, user:discord.User, *, reason:str):
-        """ warn a user for abusing the bot """
+        """warn a user for abusing the bot"""
         try:
             embed = discord.Embed(title="You are being warned by the bot developers for:")
             embed.description = f"```\n{reason}\n```"
@@ -77,26 +78,27 @@ class Manager(commands.Cog):
 
     @commands.command(aliases=["ul"])
     async def unload(self, ctx, extension:str="all"):
-        """ unload given cog, or all cogs """
+        """unload given cog, or all cogs"""
         await self.handle_cog(ctx, self.client.unload_extension, extension)
 
     @commands.command(aliases=["rl", "rel"])
     async def reload(self, ctx, extension:str="all"):
-        """ reload given cog, or all cogs """
+        """reload given cog, or all cogs"""
         await self.handle_cog(ctx, self.client.reload_extension, extension)
 
     @commands.command()
     async def load(self, ctx, extension:str="all"):
-        """ load given cog, or all cogs """
+        """load given cog, or all cogs"""
         await self.handle_cog(ctx, self.client.load_extension, extension)
 
     @commands.command()
     async def shutdown(self, ctx):
+        """log bot user out of Discord"""
         await ctx.send(f"`{self.client.user}` shut down by `{ctx.author}`.")
         await self.client.logout()
 
     async def handle_cog(self, ctx, func, extension):
-        """ load/unload/reload given cog, or all cogs, based on func arg """
+        """load/unload/reload given cog, or all cogs, based on func arg"""
         extension = extension.lower()
 
         func_name = {
@@ -128,7 +130,7 @@ class Manager(commands.Cog):
             await ctx.reply(embed=embed)
 
     def update_bl_users(self):
-        """ update config['blacklist_file'] with self.bl_users"""
+        """update config['blacklist_file'] with self.bl_users"""
         with open(self.client.config["blacklist_file"], "w") as file:
             json.dump(self.bl_users, file)
 

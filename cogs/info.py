@@ -17,11 +17,12 @@ PERMS_LIST = ['add_reactions', 'administrator', 'attach_files', 'ban_members',
 
 class Info(commands.Cog):
     def __init__(self, client):
+        """initialize Info cog"""
         self.client = client
 
     @commands.command()
     async def ping(self, ctx):
-        """ get bot latency """
+        """get bot latency"""
         before = time.monotonic()
         before_ws = int(round(self.client.latency * 1000, 3))
         msg = await ctx.send("Pinging...")
@@ -32,7 +33,7 @@ class Info(commands.Cog):
 
     @commands.command(aliases=["perms"])
     async def permissions(self, ctx, *, member:discord.Member=None):
-        """ get guild permissions for a given member """
+        """get guild permissions for a given member"""
         member = member or ctx.author
         perms = member.guild_permissions
 
@@ -51,7 +52,7 @@ class Info(commands.Cog):
 
     @commands.command(aliases=["rperms"])
     async def roleperms(self, ctx, *, role:discord.Role):
-        """ see permissions for a given role """
+        """see permissions for a given role"""
         perms = role.permissions
 
         message = ""
@@ -69,7 +70,7 @@ class Info(commands.Cog):
 
     @commands.command(aliases=["roles"])
     async def rolestats(self, ctx):
-        """ get simple stats on all roles in server """
+        """get simple stats on all roles in server"""
         roles = ctx.guild.roles
         role_groups = separate(roles, 30)
         for i, rg in enumerate(role_groups):
@@ -91,7 +92,7 @@ class Info(commands.Cog):
 
     @commands.command(aliases=["inv"])
     async def invite(self, ctx):
-        """ get bot invite """
+        """get bot invite"""
         embed = discord.Embed(title="Bot invite")
         embed.description=f"Invite {self.client.user.name} to your server with [this link]({self.client.invite})"
         embed.set_image(url=self.client.user.avatar_url)
@@ -100,7 +101,7 @@ class Info(commands.Cog):
     @commands.command(aliases=["who"])
     @commands.guild_only()
     async def whois(self, ctx, *, member:discord.Member=None):
-        """ get a given user's info """
+        """get a given user's info"""
         member = member or ctx.author
 
         now = dt.utcnow()
@@ -136,14 +137,14 @@ class Info(commands.Cog):
     @commands.command(aliases=["av", "ava", "pfp"])
     @commands.guild_only()
     async def avatar(self, ctx, *,  member:discord.Member=None):
-        """ get a given user's avatar """
+        """get a given user's avatar"""
         member = member or ctx.author
         await ctx.reply(member.avatar_url)
 
     @commands.command(aliases=["role"])
     @commands.guild_only()
     async def roleinfo(self, ctx, *, role:discord.Role):
-        """ get info on a given role """
+        """get info on a given role"""
         created = f"created: {dt_format(role.created_at)} (~{(dt.utcnow() - role.created_at).days} days)"
         members, percentage = len(role.members), len(role.members) / len(ctx.guild.members) * 100
         members = f"members: {members} | {percentage:.2f}%"  # defined separately to be able to perform logic on them
@@ -158,7 +159,7 @@ class Info(commands.Cog):
     @commands.command(aliases=["server", "guild", "guildinfo"])
     @commands.guild_only()
     async def serverinfo(self, ctx):
-        """ get info on the guild in context """
+        """get info on the guild in context"""
         embed = discord.Embed(title="Server info")
         embed.description = guild_repr(ctx)
         embed.set_author(**requested(ctx))
@@ -169,7 +170,7 @@ class Info(commands.Cog):
     @commands.cooldown(1, 30, commands.BucketType.user)
     @commands.guild_only()
     async def emojis(self, ctx):
-        """ get a list of emojis from the guild in context """
+        """get a list of emojis from the guild in context"""
         lis = separate(ctx.guild.emojis, 64)
         if not lis:
             return await ctx.reply("This guild has no emojis.")
@@ -182,7 +183,7 @@ class Info(commands.Cog):
     @commands.command(aliases=["bot"])
     @commands.cooldown(1, 15, commands.BucketType.user)
     async def botstats(self, ctx):
-        """ get bot information """
+        """get bot information"""
         owner = (await self.client.application_info()).owner
         description = \
         f"---\nname: {self.client.user.name}\nid: {self.client.user.id}\n" \

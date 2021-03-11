@@ -3,9 +3,5 @@ class Checks:
         self.client = client
 
     def is_manager(self, ctx) -> bool:
+        """check if ctx.author is a bot manager"""
         return ctx.author.id in self.client.config["managers"]
-
-    def guild_is_luminus(self, ctx):
-        if ctx.guild:
-            return ctx.guild.id == self.config["luminus"]
-        return True

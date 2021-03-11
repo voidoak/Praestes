@@ -3,6 +3,7 @@ from discord.ext import commands
 
 class Moderation(commands.Cog):
     def __init__(self, client):
+        """initialize Moderation cog"""
         self.client = client
 
     async def cog_check(self, ctx):
@@ -11,7 +12,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(view_audit_log=True)
     async def listbans(self, ctx, mod:discord.User=None):
-        """ list bans a given user has made """
+        """list bans a given user has made"""
         mod = mod or ctx.author
         bans = await ctx.guild.audit_logs(
             user=mod, action=discord.AuditLogAction.ban
@@ -38,7 +39,7 @@ class Moderation(commands.Cog):
     @commands.command(aliases=["cr"])
     @commands.has_permissions(manage_roles=True)
     async def createrole(self, ctx, name:str="new role", clr:discord.Colour=0, pos:int=1, perms:int=0):
-        """ create a role, with optional colour, position, and permissions code """
+        """create a role, with optional colour, position, and permissions code"""
         _perms = discord.Permissions()
         _perms.value = perms
 
@@ -55,7 +56,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     @commands.cooldown(1, 5, type=commands.BucketType.user)
     async def delete(self, ctx, count:int=1):
-        """ delete up to 100 messages in context channel """
+        """delete up to 100 messages in context channel"""
         if 0 >= count or count > 100:
             raise Exception("you cannot delete more than 100 messages, or less than 1.")
 
@@ -71,7 +72,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_nicknames=True)
     async def setnick(self, ctx, member:discord.Member, *, new_nick:str=None):
-        """ change given user's nickname. leave empty to remove it. """
+        """change given user's nickname. leave empty to remove it."""
         await member.edit(nick=new_nick)
         embed = discord.Embed(description=f"Updated **{member.name}**'s nickname.")
         await ctx.reply(embed=embed)
@@ -79,21 +80,21 @@ class Moderation(commands.Cog):
     @commands.command(aliases=["ar"])
     @commands.has_permissions(manage_roles=True)
     async def addrole(self, ctx, member:discord.Member, *, role:discord.Role):
-        """ add role to a given member, by mention or ID """
+        """add role to a given member, by mention or ID"""
         await member.add_roles(role)
         await ctx.reply(f"Added role `{role}` to **{member}**.")
 
     @commands.command(aliases=["rr"])
     @commands.has_permissions(manage_roles=True)
     async def removerole(self, ctx, member:discord.Member, *, role:discord.Role):
-        """ remove role from a given member, by mention or ID """
+        """remove role from a given member, by mention or ID"""
         await member.remove_roles(role)
         await ctx.reply(f"Removed role `{role}` from **{member}**")
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member:discord.Member, *, reason:str="no given reason"):
-        """ kick a given user, by ID or mention """
+        """kick a given user, by ID or mention"""
         if self.member_remove_fail(ctx, member): return
 
         await member.kick()
@@ -105,7 +106,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, user:discord.User, *, reason:str="no given reason"):
-        """ ban a given user, whether in guild or not, by ID or mention """
+        """ban a given user, whether in guild or not, by ID or mention"""
         if member:=discord.utils.get(ctx.guild.members, id=user.id):
             if self.member_remove_fail(ctx, member): return
 
@@ -118,15 +119,15 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def unban(self, ctx, user:discord.User):
-        """ revoke ban from a banned user """
+        """revoke ban from a banned user"""
         await ctx.guild.unban(user)
         await ctx.send(f"Unbanned `{user.id}`.")
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def massban(self, ctx, *, users):
-        """ remove all members passed in, space delimited. may take a few """ \
-        """moments to complete due to rate limiting. """
+        """remove all members passed in, space delimited. may take a few """ \
+        """moments to complete due to rate limiting."""
         converter = commands.UserConverter()
         message = "```diff\n"
         confirmation = await ctx.reply("Attempting mass ban...")
