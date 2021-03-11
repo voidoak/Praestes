@@ -1,24 +1,24 @@
 import discord
 from discord.ext import commands
 
+def ignorable(error):
+    """ used to ignore certain errors that are unimportant to both users and devs """
+    ignored_errors = [
+        commands.CommandNotFound, commands.NotOwner,
+        discord.ConnectionClosed, commands.CheckFailure
+    ]
+
+    for ignored in ignored_errors:
+        if isinstance(error, ignored):
+            return True
+
 class Errors(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    def ignorable(self, error):
-        """ used to ignore certain errors that are unimportant to both users and devs """
-        ignored_errors = [
-            commands.CommandNotFound, commands.NotOwner,
-            discord.ConnectionClosed, commands.CheckFailure
-        ]
-
-        for ignored in ignored_errors:
-            if isinstance(error, ignored):
-                return True
-
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        if self.ignorable(error):
+        if ignorable(error):
             return
 
         cause = error.__cause__
