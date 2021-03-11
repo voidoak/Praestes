@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 def ignorable(error):
-    """ used to ignore certain errors that are unimportant to both users and devs """
+    """used to ignore certain errors that are unimportant to both users and devs"""
     ignored_errors = [
         commands.CommandNotFound, commands.NotOwner,
         discord.ConnectionClosed, commands.CheckFailure
@@ -14,6 +14,7 @@ def ignorable(error):
 
 class Errors(commands.Cog):
     def __init__(self, client):
+        """error handling cog"""
         self.client = client
 
     @commands.Cog.listener()
