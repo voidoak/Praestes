@@ -50,7 +50,7 @@ class Help(commands.Cog):
         f"aliases:\n  - {', '.join(cmd.aliases) if cmd.aliases else 'None'}\n" + \
         f"\nusage: {cmd.name} {cmd.signature}"
 
-        embed = discord.Embed(title=f"Command info")
+        embed = discord.Embed(title="Command info")
         embed.description = f"```yaml\n---\n{description}\n---\n```"
         embed.set_footer(text="[optional], <required>, = denotes default value")
         return embed
@@ -58,11 +58,9 @@ class Help(commands.Cog):
     def generate_cog_embed(self, cog):
         """ generates informatic embed for given cog """
         commands = "\n-\n".join(f"{cmd.name}: {cmd.help}" for cmd in self.visible_cogs[cog])
-        if cog == "info":
-            commands += f"\n-\nembed: generate an embed"
         embed = discord.Embed(title="Cog info")
         embed.description = f"```yaml\n---\n{commands}\n---\n```"
-        embed.set_footer(text=f"Run help [command] to learn more about a command")
+        embed.set_footer(text="Run help [command] to learn more about a command")
         return embed
 
     def get_command(self, command:str):

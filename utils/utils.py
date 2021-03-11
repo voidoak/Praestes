@@ -1,3 +1,4 @@
+import os
 from datetime import datetime as dt
 
 def dt_format(dt_obj):
@@ -11,6 +12,15 @@ def requested(ctx):
     icon_url = ctx.author.avatar_url
     return { "name": name, "icon_url": icon_url }
 
+
+def get_config():
+    """ return dict of configuration data """
+    return {
+        "token": os.environ.get('BOT_TOKEN'),
+        "managers": (703746149722357770, 588720566370828307),  # IDs of manager accounts
+        "prefixes": [","],
+        "blacklist_file": "blacklisted.json"  # file where blacklisted UIDs are stored
+    }
 
 def guild_repr(ctx):
     """ get guild info in a formatted string  """

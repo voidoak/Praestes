@@ -30,9 +30,12 @@ class Utility(commands.Cog):
     async def dice(self, ctx, _type:str):
         """ roll dice """
         if _type.count("d") != 1:
-            return await ctx.reply(f"The type of and amount of dice should be in this format: `nds`," \
+            return await ctx.reply(
+            "The type of and amount of dice should be in this format: `nds`," \
             "where `n` is the amount of dice you'd like to roll, and `s` is the amount of sides for the dice." \
-            "An example would be `3d10`, which is rolling 3 10 sided dice.")
+            "An example would be `3d10`, which is rolling 3 10 sided dice."
+            )
+
         if len((dice:=tuple(_type.split("d")))) != 2:
             return await ctx.reply(f"Incorrect formatting of dice: `{_type}`.")
 
@@ -75,7 +78,7 @@ class Utility(commands.Cog):
     def enc_or_dec(self, conversion_type, encoding, _input):
         """ handle encoding/decoding """
         if encoding not in self.encodings:
-            raise commands.BadArgument(f"improper encoding for {ctx.command.name} command: {encoding}")
+            raise commands.BadArgument(f"improper encoding for {conversion_type} command: {encoding}")
 
         converter = getattr(base64, f"{encoding}{conversion_type}")  # get either encoding or decoding function attr
         output = str(converter(bytes(_input, "utf-8")))[2:-1]  # get rid of b' ' in output

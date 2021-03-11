@@ -70,9 +70,8 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_nicknames=True)
-    async def setnick(self, ctx, member:discord.Member, *, new_nick:str):
-        """ change given user's nickname """
-        old_nick = member.display_name
+    async def setnick(self, ctx, member:discord.Member, *, new_nick:str=None):
+        """ change given user's nickname. leave empty to remove it. """
         await member.edit(nick=new_nick)
         embed = discord.Embed(description=f"Updated **{member.name}**'s nickname.")
         await ctx.reply(embed=embed)
@@ -87,9 +86,9 @@ class Moderation(commands.Cog):
     @commands.command(aliases=["rr"])
     @commands.has_permissions(manage_roles=True)
     async def removerole(self, ctx, member:discord.Member, *, role:discord.Role):
-           """ remove role from a given member, by mention or ID """
-           await member.remove_roles(role)
-           await ctx.reply(f"Removed role `{role}` from **{member}**")
+        """ remove role from a given member, by mention or ID """
+        await member.remove_roles(role)
+        await ctx.reply(f"Removed role `{role}` from **{member}**")
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
@@ -111,7 +110,7 @@ class Moderation(commands.Cog):
             if self.member_remove_fail(ctx, member): return
 
         await ctx.guild.ban(discord.Object(id=user.id))
-        embed = discord.Embed(title=f"Reason for ban:", description=reason)
+        embed = discord.Embed(title="Reason for ban:", description=reason)
         embed.set_author(name=f"{user} banned", icon_url=user.avatar_url)
         embed.set_footer(text=f"Banned by {ctx.author}\nUID: {user.id}")
         await ctx.send(embed=embed)
@@ -151,7 +150,7 @@ class Moderation(commands.Cog):
             embed.description = message + "\n```"
             await confirmation.edit(content="", embed=embed)
             await ctx.guild.ban(discord.Object(id=user.id))
-            await aio.sleep(0.5)
+            await asyncio.sleep(0.5)
 
         embed.description = message + "\n+ Completed.\n```"
         await confirmation.edit(content="", embed=embed)

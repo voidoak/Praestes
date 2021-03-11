@@ -1,4 +1,4 @@
-import discord, yaml, time, asyncio
+import discord, time, asyncio
 from discord.ext import commands
 from utils import dt_format, requested, separate, guild_repr
 from datetime import datetime as dt

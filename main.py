@@ -4,7 +4,7 @@ from discord.ext import commands
 
 class Praestes(commands.Bot):
     def __init__(self):
-        self.config = self.get_config()
+        self.config = utils.get_config()
         super().__init__(
             command_prefix = commands.when_mentioned_or(*self.config["prefixes"]),
             case_insensitive = True,
@@ -13,15 +13,6 @@ class Praestes(commands.Bot):
         self.remove_command("help")
         self.load_extensions()
         self.checks = utils.checks(self)
-
-    def get_config(self):
-        """ return dict of configuration data """
-        return {
-            "token": os.environ.get('BOT_TOKEN'),
-            "managers": (703746149722357770, 588720566370828307),  # IDs of manager accounts
-            "prefixes": [","],
-            "blacklist_file": "blacklisted.json"  # file where blacklisted UIDs are stored
-        }
 
     def load_extensions(self):
         """ at initialization, load all cogs """
