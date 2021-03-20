@@ -1,7 +1,7 @@
 import discord
 from discord.ext import flags, commands
 
-class EmbedGenerator(commands.Cog):
+class Embed(commands.Cog):
     def __init__(self, client):
         """initialize the EmbedGenerator cog"""
         self.client = client

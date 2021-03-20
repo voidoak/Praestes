@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import utils
 
+VISIBLE_COGS = [ "info", "moderation", "utility", "embed" ]
+
 class Help(commands.Cog):
     def __init__(self, client):
         """initialize the Help cog"""
@@ -13,14 +15,14 @@ class Help(commands.Cog):
         # reinitialize them on first message after the reload.
         if not getattr(self, "visible_cogs", None) is None:
             return
-        self.visible_cogs = { k:[] for k in ["info", "moderation", "utility"] }
+        self.visible_cogs = { k:[] for k in VISIBLE_COGS }
         for cmd in self.client.commands:  # get all commands and pass into cog
             cog = cmd.cog_name
             if cog:
-                if (cog:=cog.lower()) in self.visible_cogs.keys():
+                if (cog:=cog.lower()) in VISIBLE_COGS:
                     self.visible_cogs[cog].append(cmd)
 
-        for cog in self.visible_cogs.keys():  # sort cog by command names
+        for cog in VISIBLE_COGS:  # sort cog by command names
             self.visible_cogs[cog] = sorted(
                 self.visible_cogs[cog], key=(lambda c: c.name)
             )
@@ -30,7 +32,7 @@ class Help(commands.Cog):
         """display the help embed"""
         # separate cog/command embed configuration
         cmd_or_cog = cmd_or_cog.lower()
-        if (cog:=cmd_or_cog) in self.visible_cogs.keys():
+        if (cog:=cmd_or_cog) in VISIBLE_COGS:
             embed = self.generate_cog_embed(cog)
         elif cmd:=self.get_command(cmd_or_cog):
             embed = self.generate_command_embed(cmd)
