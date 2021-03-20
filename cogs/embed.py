@@ -34,4 +34,4 @@ class Embed(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(EmbedGenerator(client))
+    client.add_cog(Embed(client))
