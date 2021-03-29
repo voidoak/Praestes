@@ -4,74 +4,60 @@ import utils
 
 VISIBLE_COGS = [ "info", "moderation", "utility", "embed" ]
 
-class Help(commands.Cog):
-    def __init__(self, client):
-        """initialize the Help cog"""
-        self.client = client
+class HelpCommand(commands.HelpCommand):
+    async def send_bot_help(self, mapping):
+        desc = []
+        for cog, cmds in mapping.items():
+            if cog is None or cog.qualified_name.lower() not in VISIBLE_COGS:
+                continue
 
-    @commands.Cog.listener()
-    async def on_command(self, ctx):
-        # on cog reload, these attributes are lost; as such,
-        # reinitialize them on first message after the reload.
-        if not getattr(self, "visible_cogs", None) is None:
-            return
-        self.visible_cogs = { k:[] for k in VISIBLE_COGS }
-        for cmd in self.client.commands:  # get all commands and pass into cog
-            cog = cmd.cog_name
-            if cog:
-                if (cog:=cog.lower()) in VISIBLE_COGS:
-                    self.visible_cogs[cog].append(cmd)
+            name = cog.qualified_name
+            cmds = await self.filter_commands(cmds, sort=True)
 
-        for cog in VISIBLE_COGS:  # sort cog by command names
-            self.visible_cogs[cog] = sorted(
-                self.visible_cogs[cog], key=(lambda c: c.name)
-            )
+            desc.append(f"{cog.qualified_name}: {len(cmds)} commands")
 
-    @commands.command()
-    async def help(self, ctx, *, cmd_or_cog:str="default"):
-        """display the help embed"""
-        # separate cog/command embed configuration
-        cmd_or_cog = cmd_or_cog.lower()
-        if (cog:=cmd_or_cog) in VISIBLE_COGS:
-            embed = self.generate_cog_embed(cog)
-        elif cmd:=self.get_command(cmd_or_cog):
-            embed = self.generate_command_embed(cmd)
-        else:
-            message = "\n\n".join(f"{cog}: {len(cmds)} commands" for cog, cmds in self.visible_cogs.items())
+        desc = "\n-\n".join(desc)
 
-            embed = discord.Embed(description = f"```yaml\n---\n{message}\n---\n```")
-            embed.set_author(**utils.requested(ctx))
-            embed.set_footer(text="Run help [cog] to get a list of commands in a cog")
+        embed = discord.Embed(title="All Commands")
+        embed.description = f"```yaml\n---\n{desc}\n---\n```"
+        embed.set_footer(text=f"Run {self.clean_prefix}{self.invoked_with} [cog] to learn more about a cog and its commands")
+        await self.get_destination().send(embed=embed)
 
-        embed.set_author(**utils.requested(ctx))
-        return await ctx.send(embed=embed)
+    async def send_group_help(self, group):
+        desc = ""
+        cmds = await self.filter_commands(group.commands, sort=True)
+        for c in cmds:
+            desc += f"{c.qualified_name}: {c.short_doc or 'no help information listed'}\n"
 
-    def generate_command_embed(self, cmd):
-        """generates informatic embed for given command"""
-        description = \
-        f"name: {cmd.name}\ncog: {cmd.cog_name}\ndescription:\n {cmd.short_doc}\n\n" \
-        f"aliases:\n  - {', '.join(cmd.aliases) if cmd.aliases else 'None'}\n" + \
-        f"\nusage: {cmd.name} {cmd.signature}"
+        embed = discord.Embed(title=f"Group info: {group.qualified_name}")
+        embed.description = f"```yaml\n---\n{desc}\n---\n```"
+        embed.set_footer(text=f"Run {self.clean_prefix}{self.invoked_with} [command] to learn more about a command")
+        await self.get_destination().send(embed=embed)
 
-        embed = discord.Embed(title="Command info")
-        embed.description = f"```yaml\n---\n{description}\n---\n```"
+    async def send_command_help(self, cmd):
+        desc = \
+        f"name: {cmd.name}\ncog: {cmd.cog_name}\ndescription:\n {cmd.help or cmd.short_doc}\n\n" \
+        f"aliases:\n - {', '.join(cmd.aliases) if cmd.aliases else 'None'}\n\n" \
+        f"usage: {cmd.name} {cmd.signature}"
+
+        embed = discord.Embed(title=f"Command info: {cmd.qualified_name}")
+        embed.description = f"```yaml\n---\n{desc}\n---\n```"
         embed.set_footer(text="[optional], <required>, = denotes default value")
-        return embed
+        await self.get_destination().send(embed=embed)
 
-    def generate_cog_embed(self, cog):
-        """generates informatic embed for given cog"""
-        commands = "\n-\n".join(f"{cmd.name}: {cmd.help}" for cmd in self.visible_cogs[cog])
-        embed = discord.Embed(title="Cog info")
-        embed.description = f"```yaml\n---\n{commands}\n---\n```"
-        embed.set_footer(text="Run help [command] to learn more about a command")
-        return embed
-
-    def get_command(self, command:str):
-        """returns a Command object, based on string. Works on either an alias or name."""
-        for cmd in self.client.commands:
-            if command in [cmd.name] + cmd.aliases:
-                return cmd
+    async def send_cog_help(self, cog):
+        cmds = await self.filter_commands(cog.get_commands(), sort=True)
+        cmds = "\n-\n".join(f"{cmd.name}: {cmd.help}" for cmd in cmds)
+        embed = discord.Embed(title=f"Cog info: {cog.qualified_name}")
+        embed.description = f"```yaml\n---\n{cmds}\n---\n```"
+        embed.set_footer(text=f"Run {self.clean_prefix}{self.invoked_with} [command] to learn more about a command")
+        await self.get_destination().send(embed=embed)
 
 
 def setup(client):
-    client.add_cog(Help(client))
+    client._default_help_command = client.help_command
+    client.help_command = HelpCommand()
+
+
+def teardown(client):
+    client.help_command = client._default_help_command

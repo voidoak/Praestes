@@ -143,7 +143,6 @@ class Moderation(commands.Cog):
             if user:=discord.utils.get(ctx.guild.members, id=user.id):
                 if user.id == ctx.bot.user.id or user.id == ctx.guild.owner.id \
                         or self.member_remove_fail(ctx, user):
-                    print(ctx.author.id, user.id)
                     message += f"- Could not ban {user}.\n"
                     continue
 
